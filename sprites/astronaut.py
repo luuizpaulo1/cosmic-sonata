@@ -52,5 +52,3 @@ class Astronaut(Sprite):
 
         elif self.game.keyboard.key_pressed("SPACE"):
             self.jump()
-
-        print(self.is_colliding_with_obstacle)
