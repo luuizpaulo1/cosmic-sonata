@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
 from PPlay.sprite import Sprite
+from mappings import gravity_by_scenario
 
 
 @dataclass
@@ -14,8 +15,9 @@ class Astronaut(Sprite):
         super().__init__("./assets/astronaut.png", frames=8)
         self.game = clsz
         self.set_sequence_time(0, 7, 75)
-        self.velocity = Velocity(x=300, y=0)
+        self.velocity = Velocity(x=350 * self.game.difficulty_multiplier, y=0)
         self.is_jumping = False
+        self.is_walking = True
 
         self.set_position(20, self.game.window.height - self.game.ground.height - self.height)
 
@@ -29,13 +31,11 @@ class Astronaut(Sprite):
         return any(self.collided(obstacle) for obstacle in obstacles)
 
     def jump(self):
-        self.velocity.y = -800
+        self.velocity.y = -1000
         self.is_jumping = True
 
     def update_jump(self):
-        gravity = 1800
-
-        self.velocity.y += gravity * self.game.window.delta_time()
+        self.velocity.y += gravity_by_scenario[self.game.scenario] * self.game.window.delta_time()
         self.y += self.velocity.y * self.game.window.delta_time()
 
         if self.is_touching_ground:
@@ -45,6 +45,10 @@ class Astronaut(Sprite):
     def action(self):
         self.play()
 
+        if not self.is_walking:
+            self.set_curr_frame(0)
+            self.pause()
+
         if self.is_jumping:
             self.update_jump()
             self.set_curr_frame(2)
@@ -52,3 +56,6 @@ class Astronaut(Sprite):
 
         elif self.game.keyboard.key_pressed("SPACE"):
             self.jump()
+
+        if self.is_colliding_with_obstacle:
+            self.game.game_over = True
