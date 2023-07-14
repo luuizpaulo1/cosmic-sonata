@@ -19,7 +19,7 @@ class CosmicSonata:
         self.keyboard = keyboard
         self.database = database
 
-        self.scenario = Scenario.NEPTUNE
+        self.scenario = Scenario.EARTH
         self.scenario_last_updated_at = now
         self.scenario_screen_time = randint(10, 20)
         self.projectiles = []
