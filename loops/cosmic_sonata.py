@@ -37,7 +37,13 @@ class CosmicSonata:
         self.game_over = False
 
     def show_score(self):
-        self.window.draw_text(f"SCORE: {str(int(self.score))}", color="red", size=20, x=self.window.width - 130, y=0)
+        self.window.draw_text(
+            f"SCORE: {str(int(self.score))}",
+            color="red",
+            size=20,
+            x=self.window.width - 130,
+            y=0,
+        )
 
     def show_scenario_countdown(self):
         self.window.draw_text(
@@ -45,7 +51,7 @@ class CosmicSonata:
             color="red",
             size=60,
             x=self.window.width / 2,
-            y=self.window.height / 3
+            y=self.window.height / 3,
         )
 
     def scenario_transition(self):
@@ -56,7 +62,7 @@ class CosmicSonata:
         self.difficulty_multiplier += 0.15
         self.astronaut.velocity = Velocity(
             self.astronaut.velocity.x * self.difficulty_multiplier,
-            self.astronaut.velocity.y
+            self.astronaut.velocity.y,
         )
         self.background = background_by_scenario[self.scenario]
         self.ground.update()
@@ -69,14 +75,14 @@ class CosmicSonata:
             size=font_size_header,
             color="red",
             x=(self.window.width / 2) - 150,
-            y=self.window.height / 2 - font_size_header / 2
+            y=self.window.height / 2 - font_size_header / 2,
         )
         self.window.draw_text(
             "type your name in the terminal",
             size=font_size_body,
             color="red",
             x=300,
-            y=self.window.height / 2 - font_size_body / 2 + font_size_body * 2
+            y=self.window.height / 2 - font_size_body / 2 + font_size_body * 2,
         )
 
     def move_projectiles(self):
@@ -124,10 +130,14 @@ class CosmicSonata:
                 self.score_last_updated_at = now
                 self.score += 50 * self.difficulty_multiplier
 
-            if (now - self.scenario_last_updated_at).seconds >= self.scenario_screen_time - 5:
+            if (
+                now - self.scenario_last_updated_at
+            ).seconds >= self.scenario_screen_time - 5:
                 self.show_scenario_countdown()
 
-            if (now - self.scenario_last_updated_at).seconds >= self.scenario_screen_time:
+            if (
+                now - self.scenario_last_updated_at
+            ).seconds >= self.scenario_screen_time:
                 self.scenario_transition()
 
             self.show_score()
@@ -136,7 +146,9 @@ class CosmicSonata:
             if self.game_over:
                 self.draw_game_over()
                 self.window.update()
-                score = UserScore(input("name: "), score=self.score, created_at=datetime.now())
+                score = UserScore(
+                    input("name: "), score=self.score, created_at=datetime.now()
+                )
                 self.database.save_user_score(score)
                 self.finish = True
 

@@ -24,29 +24,49 @@ class MainMenu:
         self.exit_button = Sprite("./assets/buttons/exit.png")
         self.finish = False
 
-        self.start.set_position((self.background.width / 2) - (self.start.width / 2), 50)
-        self.difficulty_button.set_position((self.background.width / 2) - (self.difficulty_button.width / 2), 150)
-        self.ranking_button.set_position((self.background.width / 2) - (self.ranking_button.width / 2), 250)
-        self.exit_button.set_position((self.background.width / 2) - (self.exit_button.width / 2), 350)
+        self.start.set_position(
+            (self.background.width / 2) - (self.start.width / 2), 50
+        )
+        self.difficulty_button.set_position(
+            (self.background.width / 2) - (self.difficulty_button.width / 2), 150
+        )
+        self.ranking_button.set_position(
+            (self.background.width / 2) - (self.ranking_button.width / 2), 250
+        )
+        self.exit_button.set_position(
+            (self.background.width / 2) - (self.exit_button.width / 2), 350
+        )
 
         self.diff_menu = DifficultyMenu(self.window, self.mouse, self.keyboard)
-        self.ranking_menu = RankingMenu(self.window, self.mouse, self.keyboard, self.database)
-        self.cosmic_sonata = CosmicSonata(self.window, self.mouse, self.keyboard, self.database)
+        self.ranking_menu = RankingMenu(
+            self.window, self.mouse, self.keyboard, self.database
+        )
+        self.cosmic_sonata = CosmicSonata(
+            self.window, self.mouse, self.keyboard, self.database
+        )
 
     def loop(self):
         if self.mouse.is_over_object(self.start) and self.mouse.is_button_pressed(1):
-            self.cosmic_sonata = CosmicSonata(self.window, self.mouse, self.keyboard, self.database)
+            self.cosmic_sonata = CosmicSonata(
+                self.window, self.mouse, self.keyboard, self.database
+            )
             self.cosmic_sonata.loop()
 
-        if self.mouse.is_over_object(self.difficulty_button) and self.mouse.is_button_pressed(1):
+        if self.mouse.is_over_object(
+            self.difficulty_button
+        ) and self.mouse.is_button_pressed(1):
             self.diff_menu.finish = False
             self.diff_menu.loop()
 
-        if self.mouse.is_over_object(self.ranking_button) and self.mouse.is_button_pressed(1):
+        if self.mouse.is_over_object(
+            self.ranking_button
+        ) and self.mouse.is_button_pressed(1):
             self.ranking_menu.finish = False
             self.ranking_menu.loop()
 
-        if self.mouse.is_over_object(self.exit_button) and self.mouse.is_button_pressed(1):
+        if self.mouse.is_over_object(self.exit_button) and self.mouse.is_button_pressed(
+            1
+        ):
             self.finish = True
 
         self.background.draw()

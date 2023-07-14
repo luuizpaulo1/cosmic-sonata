@@ -25,6 +25,9 @@ class Plant(Enemy):
     def action(self):
         self.x = self.ground_element.x + self.ground_element.sprite_offset
         now = datetime.now()
-        if self.last_shoot is None or (now - self.last_shoot).seconds >= self.shoot_reload_time:
+        if (
+            self.last_shoot is None
+            or (now - self.last_shoot).seconds >= self.shoot_reload_time
+        ):
             self.shoot()
             self.last_shoot = now

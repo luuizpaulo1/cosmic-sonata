@@ -9,6 +9,9 @@ class Enemy(Sprite):
         super().__init__(*args, **kwargs)
 
     def action(self):
-        new_offset = self.ground_element.sprite_offset + self.velocity * self.game.window.delta_time()
+        new_offset = (
+            self.ground_element.sprite_offset
+            + self.velocity * self.game.window.delta_time()
+        )
         self.ground_element.sprite_offset = new_offset
         self.x = self.ground_element.x + new_offset

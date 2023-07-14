@@ -13,14 +13,20 @@ class GroundElement(Sprite):
     def __init__(self, scenario: Scenario):
         super().__init__(f"./assets/grounds/{ground_by_scenario[scenario]}")
         self.sprite: Optional[Union[Obstacle, Enemy]] = None
-        self.sprite_offset: int = randint(0, int(self.width / 2)) if not isinstance(self.sprite, Enemy) else self.width
+        self.sprite_offset: int = (
+            randint(0, int(self.width / 2))
+            if not isinstance(self.sprite, Enemy)
+            else self.width
+        )
 
     def add_sprite(self, sprite: Sprite):
         self.sprite = sprite
         if sprite:
             self.sprite.set_position(
-                (self.x + self.sprite_offset) if isinstance(self.sprite, Obstacle) else self.x + self.width,
-                self.y - sprite.height
+                (self.x + self.sprite_offset)
+                if isinstance(self.sprite, Obstacle)
+                else self.x + self.width,
+                self.y - sprite.height,
             )
 
 
@@ -28,10 +34,13 @@ class Ground:
     def __init__(self, game):
         self.game = game
         self.elements: list[GroundElement] = [
-            GroundElement(self.game.scenario) for _ in range(3)]  # elements of the ground
+            GroundElement(self.game.scenario) for _ in range(3)
+        ]  # elements of the ground
 
         for index, element in enumerate(self.elements):
-            element.set_position(index * element.width, self.game.window.height - element.height)
+            element.set_position(
+                index * element.width, self.game.window.height - element.height
+            )
 
         self.height = self.elements[0].height
         self.width = self.game.window.width
@@ -39,8 +48,8 @@ class Ground:
     def move_elements(self):
         for element in self.elements:
             element.x -= (
-                             self.game.astronaut.velocity.x if self.game.astronaut.is_walking else 0
-                         ) * self.game.window.delta_time()
+                self.game.astronaut.velocity.x if self.game.astronaut.is_walking else 0
+            ) * self.game.window.delta_time()
 
     def expire_elements(self):
         left_element = self.elements[0]
@@ -54,7 +63,7 @@ class Ground:
             new_element = GroundElement(scenario=self.game.scenario)
             new_element.set_position(
                 right_element.x + right_element.width,
-                self.game.window.height - new_element.height
+                self.game.window.height - new_element.height,
             )
             self.elements.append(new_element)
 

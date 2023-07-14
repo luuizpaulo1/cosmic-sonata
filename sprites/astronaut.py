@@ -26,7 +26,9 @@ class Astronaut(Sprite):
         self.last_invincible_time = None
         self.invincible_time = 5
 
-        self.set_position(20, self.game.window.height - self.game.ground.height - self.height)
+        self.set_position(
+            20, self.game.window.height - self.game.ground.height - self.height
+        )
 
     @property
     def is_touching_ground(self):
@@ -36,13 +38,20 @@ class Astronaut(Sprite):
     def is_colliding_with_obstacle(self):
         if self.is_invincible:
             return False
-        obstacles = [element.sprite for element in self.game.ground.elements if element.sprite is not None and not isinstance(element.sprite, BasePowerUp)]
+        obstacles = [
+            element.sprite
+            for element in self.game.ground.elements
+            if element.sprite is not None
+            and not isinstance(element.sprite, BasePowerUp)
+        ]
         return any(self.collided(obstacle) for obstacle in obstacles)
 
     @property
     def is_colliding_with_power_up(self):
         for element in self.game.ground.elements:
-            if isinstance(element.sprite, BasePowerUp) and self.collided(element.sprite):
+            if isinstance(element.sprite, BasePowerUp) and self.collided(
+                element.sprite
+            ):
                 element.sprite = None
                 return True
 
@@ -51,7 +60,9 @@ class Astronaut(Sprite):
         self.is_jumping = True
 
     def update_jump(self):
-        self.velocity.y += gravity_by_scenario[self.game.scenario] * self.game.window.delta_time()
+        self.velocity.y += (
+            gravity_by_scenario[self.game.scenario] * self.game.window.delta_time()
+        )
         self.y += self.velocity.y * self.game.window.delta_time()
 
         if self.is_touching_ground:

@@ -18,48 +18,26 @@ class RankingMenu:
 
     def show_scores(self):
         user_scores = self.database.get_top_5()
-        self.window.draw_text(
-            "Name",
-            size=30,
-            color="red",
-            x=200,
-            y=100
-        )
-        self.window.draw_text(
-            "Score",
-            size=30,
-            color="red",
-            x=400,
-            y=100
-        )
-        self.window.draw_text(
-            "Date",
-            size=30,
-            color="red",
-            x=600,
-            y=100
-        )
+        self.window.draw_text("Name", size=30, color="red", x=200, y=100)
+        self.window.draw_text("Score", size=30, color="red", x=400, y=100)
+        self.window.draw_text("Date", size=30, color="red", x=600, y=100)
         for index, user_score in enumerate(user_scores):
             self.window.draw_text(
-                user_score.name,
-                size=30,
-                color="red",
-                x=200,
-                y=100 + (index + 1) * 70
+                user_score.name, size=30, color="red", x=200, y=100 + (index + 1) * 70
             )
             self.window.draw_text(
                 str(user_score.score),
                 size=30,
                 color="red",
                 x=400,
-                y=100 + (index + 1) * 70
+                y=100 + (index + 1) * 70,
             )
             self.window.draw_text(
                 str(user_score.created_at[:19]),
                 size=30,
                 color="red",
                 x=600,
-                y=100 + (index + 1) * 70
+                y=100 + (index + 1) * 70,
             )
 
     def loop(self):

@@ -15,11 +15,15 @@ class DB:
         self.con = sqlite3.connect("db.db")
         self.cur = self.con.cursor()
 
-    def create_user_score_table(self, ):
+    def create_user_score_table(
+        self,
+    ):
         self.cur.execute("CREATE TABLE IF NOT EXISTS scores(name , score, created_at)")
         self.con.commit()
 
-    def get_top_5(self, ) -> list[UserScore]:
+    def get_top_5(
+        self,
+    ) -> list[UserScore]:
         stmt = f"SELECT name, score, created_at FROM scores ORDER BY score DESC LIMIT 5"
         res = self.cur.execute(stmt)
         fetch = res.fetchall()
