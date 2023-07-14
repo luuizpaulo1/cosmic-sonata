@@ -1,3 +1,5 @@
+from pygame import mixer
+
 from PPlay.gameimage import GameImage
 from PPlay.keyboard import Keyboard
 from PPlay.mouse import Mouse

@@ -8,5 +8,4 @@ class Projectile(Sprite):
         self.velocity = -500
 
     def action(self):
-        print(f"{self.x=}")
         self.x += (self.velocity - self.game.astronaut.velocity.x) * self.game.window.delta_time()

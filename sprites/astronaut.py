@@ -1,7 +1,11 @@
 from dataclasses import dataclass
+from datetime import datetime
+
+import pygame
 
 from PPlay.sprite import Sprite
 from mappings import gravity_by_scenario
+from sprites.powerups.base_powerup import BasePowerUp
 
 
 @dataclass
@@ -18,6 +22,9 @@ class Astronaut(Sprite):
         self.velocity = Velocity(x=350 * self.game.difficulty_multiplier, y=0)
         self.is_jumping = False
         self.is_walking = True
+        self.is_invincible = False
+        self.last_invincible_time = None
+        self.invincible_time = 5
 
         self.set_position(20, self.game.window.height - self.game.ground.height - self.height)
 
@@ -27,8 +34,17 @@ class Astronaut(Sprite):
 
     @property
     def is_colliding_with_obstacle(self):
-        obstacles = [element.sprite for element in self.game.ground.elements if element.sprite is not None]
+        if self.is_invincible:
+            return False
+        obstacles = [element.sprite for element in self.game.ground.elements if element.sprite is not None and not isinstance(element.sprite, BasePowerUp)]
         return any(self.collided(obstacle) for obstacle in obstacles)
+
+    @property
+    def is_colliding_with_power_up(self):
+        for element in self.game.ground.elements:
+            if isinstance(element.sprite, BasePowerUp) and self.collided(element.sprite):
+                element.sprite = None
+                return True
 
     def jump(self):
         self.velocity.y = -1000
@@ -43,6 +59,7 @@ class Astronaut(Sprite):
             self.velocity.y = 0
 
     def action(self):
+        now = datetime.now()
         self.play()
 
         if not self.is_walking:
@@ -59,3 +76,13 @@ class Astronaut(Sprite):
 
         if self.is_colliding_with_obstacle:
             self.game.game_over = True
+
+        if self.is_colliding_with_power_up:
+            self.is_invincible = True
+            self.image = pygame.image.load("./assets/powerup_astronaut.png")
+            self.last_invincible_time = now
+
+        if self.is_invincible:
+            if (now - self.last_invincible_time).seconds >= self.invincible_time:
+                self.image = pygame.image.load("./assets/astronaut.png")
+                self.is_invincible = False

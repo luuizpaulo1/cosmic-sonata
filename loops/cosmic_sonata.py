@@ -19,7 +19,7 @@ class CosmicSonata:
         self.keyboard = keyboard
         self.database = database
 
-        self.scenario = Scenario.EARTH
+        self.scenario = Scenario.NEPTUNE
         self.scenario_last_updated_at = now
         self.scenario_screen_time = randint(10, 20)
         self.projectiles = []
@@ -50,6 +50,7 @@ class CosmicSonata:
 
     def scenario_transition(self):
         now = datetime.now()
+        self.projectiles = []
         self.scenario = choice([i for i in list(Scenario) if i != self.scenario])
         self.scenario_last_updated_at = now
         self.difficulty_multiplier += 0.15
@@ -85,9 +86,10 @@ class CosmicSonata:
     def expire_projectiles(self):
         for index_projectile in range(len(self.projectiles) - 1, -1, -1):
             projectile = self.projectiles[index_projectile]
-            if projectile.collided(self.astronaut):
-                self.game_over = True
-                break
+            if not self.astronaut.is_invincible:
+                if projectile.collided(self.astronaut):
+                    self.game_over = True
+                    break
 
             if self.projectiles[index_projectile].x < 0:
                 self.projectiles.pop(index_projectile)
@@ -106,7 +108,6 @@ class CosmicSonata:
                 self.astronaut.is_walking = True
 
             self.background.draw()
-            self.astronaut.draw()
             self.ground.draw()
 
             self.astronaut.action()
@@ -117,6 +118,7 @@ class CosmicSonata:
             self.draw_projectiles()
 
             self.astronaut.update()
+            self.astronaut.draw()
 
             if (now - self.score_last_updated_at).seconds >= 1:
                 self.score_last_updated_at = now

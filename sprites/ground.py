@@ -6,6 +6,7 @@ from loops.cosmic_sonata import Scenario
 from mappings import ground_by_scenario, enemies_by_scenario, obstacles_by_scenario
 from sprites.enemies.base_enemy import Enemy
 from sprites.obstacles.base_obstacle import Obstacle
+from sprites.powerups.powerup import PowerUp
 
 
 class GroundElement(Sprite):
@@ -57,10 +58,12 @@ class Ground:
             )
             self.elements.append(new_element)
 
-            if 0.0 <= random_value <= 0.0:  # 40% chance it will spawn some obstacle
+            if 0.3 <= random_value < 0.4:  # 10% chance will spawn power up
+                sprite = PowerUp(self.game, new_element)
+            elif 0.4 <= random_value < 0.8:  # 40% chance it will spawn some obstacle
                 sprite_class = choice(obstacles_by_scenario[self.game.scenario])
                 sprite = sprite_class(self.game, new_element)
-            elif random_value > 0.5:  # 20% chance it will spawn some enemy
+            elif random_value > 0.8:  # 20% chance it will spawn some enemy
                 sprite_class = choice(enemies_by_scenario[self.game.scenario])
                 sprite = sprite_class(self.game, new_element)
             else:
